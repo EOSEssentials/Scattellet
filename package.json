@@ -1,0 +1,39 @@
+{
+  "name": "scattellet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "set SCATTELLET=development&& webpack --watch",
+    "build": "set SCATTELLET=production&& set NODE_ENV=production&& webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv-webpack": "^1.5.5",
+    "eosjs": "^10.0.0",
+    "eosjs-ecc": "^4.0.0",
+    "vue": "^2.5.13",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "chai": "^4.1.2",
+    "copy-webpack-plugin": "^4.5.1",
+    "css-loader": "^0.28.10",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.11",
+    "ignore-emit-webpack-plugin": "^0.2.1",
+    "mocha": "^4.1.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^6.0.7",
+    "uglifyjs-webpack-plugin": "^1.2.5",
+    "vue-loader": "^13.7.0",
+    "vue-template-compiler": "^2.5.13",
+    "webpack": "^3.10.0"
+  }
+}

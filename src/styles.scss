@@ -1,0 +1,316 @@
+div, figure, section, nav, article, input, textarea, a, h1, h2, h3, p {
+  padding:0; margin:0; box-sizing: border-box;
+}
+
+body {
+  padding:0;
+  margin:0;
+  overflow-y:scroll;
+  word-break: break-word;
+  font-family: 'Raleway', sans-serif;
+  color:#505050;
+}
+
+a {
+  display:inherit;
+  text-decoration: inherit;
+  color:inherit;
+}
+
+.os {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.background {
+  background-color:#48777a;
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:50%;
+  min-height:350px;
+  transition:height 0.5s ease;
+  z-index:-1;
+
+  &.full {
+    height:100%;
+  }
+}
+
+.container {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  position:fixed;
+  top:0; bottom:0; left:0; right:0;
+  flex-direction: column;
+}
+
+.logo {
+  font-size:128px;
+  color:#fff;
+  font-family: 'Grand Hotel', sans-serif;
+  margin-top:-110px;
+  opacity:1;
+  visibility:visible;
+  transition: all 0.3s ease;
+  transition-property: opacity, visibility;
+
+  &.top {
+    font-size:70px;
+    position:fixed;
+    top:40px;
+    right:70px;
+    margin-top:0;
+    transition-delay: 0.5s;
+  }
+
+  &.gone {
+    opacity:0;
+    visibility:hidden;
+    transition-delay: 0s;
+  }
+}
+
+button {
+  user-select: none;
+  position: relative;
+  z-index:2;
+
+  cursor: pointer;
+  border:0;
+  outline:0;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#5ca7ac+0,4d8c90+100 */
+  background: #5ca7ac; /* Old browsers */
+  background: -moz-linear-gradient(top, #5ca7ac 0%, #4d8c90 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #5ca7ac 0%,#4d8c90 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #5ca7ac 0%,#4d8c90 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5ca7ac', endColorstr='#4d8c90',GradientType=0 ); /* IE6-9 */
+  border-radius:50%;
+  height:170px;
+  width:170px;
+  line-height:170px;
+  text-align:center;
+  color:#fff;
+  font-family: 'Raleway', sans-serif;
+  font-size:64px;
+  font-weight:800;
+  text-shadow:0 2px 5px rgba(0, 0, 0, 0.1), 0 0 30px rgba(255, 255, 255, 0.2);
+  box-shadow:0 20px 30px rgba(0,0,0,0.08), 0 17px 2px rgba(0,0,0,0.08), inset 0 0 50px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  transition-property: box-shadow, text-shadow, font-size, height, width;
+
+  &:hover {
+    text-shadow:0 2px 5px rgba(0, 0, 0, 0.1), 0 0 60px rgba(255, 255, 255, 0.5);
+    box-shadow:0 40px 50px rgba(0,0,0,0.08), 0 17px 12px rgba(0,0,0,0.08), inset 0 0 50px rgba(0,0,0,0.1);
+  }
+
+  &:active {
+    text-shadow:0 2px 5px rgba(0, 0, 0, 0.1), 0 0 30px rgba(255, 255, 255, 0.2);
+    box-shadow:0 5px 10px rgba(0,0,0,0.08), 0 5px 2px rgba(0,0,0,0.1);
+  }
+
+  &.send {
+    font-size:45px;
+    height:220px;
+    width:220px;
+  }
+
+  &:disabled {
+    box-shadow:0 40px 50px rgba(0,0,0,0.08), 0 17px 12px rgba(0,0,0,0.08), inset 0 0 280px yellow;
+  }
+}
+
+.doodad {
+  position: fixed;
+  top:0;
+  right:0;
+  z-index:-1;
+  opacity:1;
+  visibility:visible;
+  transition: all 0.3s ease;
+  transition-property: opacity, visibility;
+  transition-delay: 0.6s;
+
+  &.gone {
+    opacity:0;
+    visibility:hidden;
+    transition-delay: 0s;
+  }
+}
+
+
+.balance {
+  width:100%;
+  text-align:center;
+  position:fixed;
+  bottom:50px;
+  left:0; right:0;
+  font-size:18px;
+  color:#c6dee0;
+  font-family: 'Open Sans', sans-serif;
+
+  opacity:0;
+  visibility: hidden;
+  transition:all 0.2s ease;
+  transition-property: opacity, visibility;
+  transition-delay: 0s;
+
+  &.show {
+    opacity:1;
+    visibility: visible;
+    transition-delay: 0.2s;
+  }
+}
+
+
+.error {
+  width:100%;
+  text-align:center;
+  position:fixed;
+  top:0;
+  left:0; right:0;
+  font-size:18px;
+  //color:#c6dee0;
+  font-family: 'Raleway', sans-serif;
+  font-weight:bold;
+  color:yellow;
+
+  opacity:0;
+  visibility: hidden;
+  transition:all 0.2s ease;
+  transition-property: opacity, visibility, top;
+  transition-delay: 0s;
+
+  &.show {
+    top:50px;
+    opacity:1;
+    visibility: visible;
+    transition-delay: 0.2s;
+  }
+}
+
+
+.trx {
+  width:100%;
+  text-align:center;
+  position:fixed;
+  bottom:30px;
+  left:0; right:0;
+  font-size:13px;
+  color:#c6dee0;
+  font-family: 'Open Sans', sans-serif;
+
+  opacity:0;
+  visibility: hidden;
+  transition:all 0.2s ease;
+  transition-property: opacity, visibility;
+  transition-delay: 0.2s;
+
+  &.show {
+    opacity:1;
+    visibility: visible;
+  }
+}
+
+.input-containers {
+  width:0;
+  height:220px;
+  float: left;
+  clear: both;
+  overflow:hidden;
+  opacity:0;
+
+  transition:all 0.5s ease;
+  transition-property: width, opacity;
+  transition-delay: 0s;
+  margin-right:-150px;
+
+
+  &.open {
+    width:820px;
+    opacity:1;
+    transition-delay: 0.2s;
+  }
+
+  .input-container {
+    clear: both;
+    overflow: hidden;
+
+    &:first-child {
+      width:640px;
+      float:right;
+    }
+  }
+}
+
+.power-out {
+  cursor: pointer;
+  font-size:60px;
+  position: fixed;
+  top:40px;
+  left:50px;
+  color:#fff;
+  z-index:3;
+  opacity:0;
+  visibility:hidden;
+
+  transition: all 0.3s ease;
+  transition-property: opacity, visibility, color;
+
+
+  &:hover {
+    color:yellow;
+  }
+
+  &.show{
+    opacity:1;
+    visibility:visible;
+    transition-delay: 0.8s;
+  }
+}
+
+input {
+  outline:0;
+  border:0;
+
+  height:100px;
+  width:100%;
+  background:#fff;
+  border-radius:50px;
+  margin-bottom:20px;
+  font-size: 36px;
+  padding:50px;
+  font-weight: 300;
+  font-family: 'Raleway', sans-serif;
+
+  &.symbol {
+    width:180px;
+    float:left;
+    border-top-right-radius:0;
+    border-bottom-right-radius:0;
+    border-right:1px solid rgba(0,0,0,0.05);
+    padding-right:20px;
+    font-weight:800;
+  }
+
+  &.amount {
+    width:calc(100% - 180px);
+    float:left;
+    border-top-left-radius:0;
+    border-bottom-left-radius:0;
+  }
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #cccccc;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #cccccc;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: #cccccc;
+}
