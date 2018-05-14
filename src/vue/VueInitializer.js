@@ -38,7 +38,7 @@ export default class VueInitializer {
     }
 
     setupRouting(routes, middleware){
-        const router = new VueRouter({routes}); //, mode: 'history'
+        const router = new VueRouter({routes, mode: 'history'}); //, mode: 'history'
         router.beforeEach((to, from, next) => middleware(to, next, store));
         return router;
     }
