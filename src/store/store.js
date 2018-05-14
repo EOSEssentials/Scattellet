@@ -16,8 +16,8 @@ const getters = {
     account:state => state.scatter && state.scatter.identity ? state.scatter.identity.accounts[0] : null,
     network:state => ({
         blockchain:'eos',
-        host:'192.168.56.101',
-        port:8888
+        host:process.env.NETWORK_HOST,
+        port:process.env.NETWORK_PORT
     })
 };
 
