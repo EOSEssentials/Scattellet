@@ -9,6 +9,7 @@ Vue.use(Vuex);
 const state = {
     scatter:null,
     scateos:null,
+    selectedNetwork:{host:'', port:0},
 };
 
 const getters = {
@@ -16,8 +17,8 @@ const getters = {
     account:state => state.scatter && state.scatter.identity ? state.scatter.identity.accounts[0] : null,
     network:state => ({
         blockchain:'eos',
-        host:process.env.NETWORK_HOST,
-        port:process.env.NETWORK_PORT
+        host:state.selectedNetwork.host,
+        port:state.selectedNetwork.port
     })
 };
 

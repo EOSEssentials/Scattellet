@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv-webpack": "^1.5.5",
-    "eosjs": "^10.0.0",
+    "eosjs": "11.0.0",
     "eosjs-ecc": "^4.0.0",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1",
@@ -34,6 +34,6 @@
     "uglifyjs-webpack-plugin": "^1.2.5",
     "vue-loader": "^13.7.0",
     "vue-template-compiler": "^2.5.13",
-    "webpack": "^3.10.0"
+    "webpack": "^3.12.0"
   }
 }

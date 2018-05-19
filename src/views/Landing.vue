@@ -1,6 +1,9 @@
 <template>
     <section>
         <figure class="background" :class="{'full':identified}"></figure>
+
+
+
         <figure class="power-out" @click="logout" :class="{'show':identified}">
             <i class="fa fa-power-off"></i>
         </figure>
@@ -11,6 +14,12 @@
         <figure class="logo top" :class="{'gone':!identified}">Scattellet</figure>
         <section class="container">
             <figure class="logo" :class="{'gone':identified}">Scattellet</figure>
+            <section class="network" :class="{'hidden':identified}">
+                <section class="input-container">
+                    <label>Chain</label>
+                    <input placeholder="Domain or IP" v-model="selectedNetworkString" />
+                </section>
+            </section>
             <section>
                 <section class="input-containers" :class="{'open':identified}">
                     <section class="input-container">
@@ -36,6 +45,7 @@
 
     import Eos from 'eosjs';
 
+    let networkTimeout = null;
     export default {
         data(){ return {
             identified:false,
@@ -47,13 +57,16 @@
             transferring:false,
             transferred:false,
             trx:'',
-            error:null
+            error:null,
+            selectingNetwork:false,
+            selectedNetworkString:''
         }},
 
         computed: {
             ...mapState([
                 'scatter',
-                'scateos'
+                'scateos',
+                'selectedNetwork'
             ]),
             ...mapGetters([
                 'identity',
@@ -62,7 +75,7 @@
             ])
         },
         mounted(){
-            this.eos = Eos.Localnet({httpEndpoint:`http://${this.network.host}:${this.network.port}`});
+//            this.eos = Eos.Localnet({httpEndpoint:`http://${this.network.host}:${this.network.port}`});
             setInterval(() => this.getBalance(), 5000);
         },
         methods: {
@@ -71,6 +84,9 @@
                     const requiredFields = {accounts: [this.network]};
                     await this.scatter.getIdentity(requiredFields);
                 } else this.transfer();
+            },
+            toggleSelectingNetwork(){
+                this.selectingNetwork = !this.selectingNetwork;
             },
             async logout(){
                 await this.scatter.forgetIdentity();
@@ -117,11 +133,11 @@
                     limit:500
                 });
                 const row = balances.rows.find(row => row.balance.split(" ")[1].toLowerCase() === this.symbol.toLowerCase());
-                console.log('row', row);
                 this.balance = row ? row.balance.split(" ")[0] : 0;
             },
             ...mapActions([
-                Actions.SET_SCATEOS
+                Actions.SET_SCATEOS,
+                Actions.SET_NETWORK,
             ])
         },
         watch:{
@@ -134,12 +150,86 @@
             },
             symbol(){
                 this.getBalance();
+            },
+            network(){
+                if(this.selectedNetwork.host.length) {
+                    const httpEndpoint = `http://${this.selectedNetwork.host}:${this.selectedNetwork.port}`;
+                    this.selectedNetworkString = httpEndpoint;
+                    this.eos = Eos.Localnet({httpEndpoint});
+                }
+            },
+            selectedNetworkString(){
+                clearTimeout(networkTimeout);
+                networkTimeout = setTimeout(() => {
+                    this[Actions.SET_NETWORK](this.selectedNetworkString)
+                }, 800);
             }
         }
 
     }
+
 </script>
 
 <style lang="scss">
+    .screen {
+        position: relative;
+        left:0;
+        transition: all 0.5s ease;
+        transition-property: left;
 
+        &.out-right {
+            left:100%;
+        }
+    }
+
+    .network {
+        position: relative;
+        z-index:2;
+        opacity:1;
+        visibility: visible;
+        transition: all 0.2s ease;
+        transition-property: opacity, visibility;
+
+        &.hidden {
+            opacity:0;
+            visibility: hidden;
+        }
+
+        .input-container {
+            overflow: hidden;
+            margin-bottom:20px;
+
+            label {
+                border-top-left-radius: 50px;
+                border-bottom-left-radius: 50px;
+                width:60px;
+                text-align:center;
+                height:28px;
+                line-height:29px;
+                font-size:11px;
+                float:left;
+                text-transform: uppercase;
+                font-weight:800;
+                background:rgba(255,255,255,0.3);
+                color:#fff;
+                text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            }
+
+            input {
+                padding:0 10px;
+                height:28px;
+                line-height:26px;
+                font-size:13px;
+                float:left;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                width:250px;
+                margin-bottom:10px;
+                font-family: 'Open Sans', sans-serif;
+                background:rgba(255,255,255,0.2);
+                color:#fff;
+                text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            }
+        }
+    }
 </style>

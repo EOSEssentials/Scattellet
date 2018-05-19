@@ -48,6 +48,7 @@ a {
 
 .logo {
   font-size:128px;
+  line-height:110px;
   color:#fff;
   font-family: 'Grand Hotel', sans-serif;
   margin-top:-110px;
@@ -55,6 +56,7 @@ a {
   visibility:visible;
   transition: all 0.3s ease;
   transition-property: opacity, visibility;
+
 
   &.top {
     font-size:70px;
