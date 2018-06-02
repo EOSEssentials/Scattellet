@@ -75,7 +75,6 @@
             ])
         },
         mounted(){
-//            this.eos = Eos.Localnet({httpEndpoint:`http://${this.network.host}:${this.network.port}`});
             setInterval(() => this.getBalance(), 5000);
         },
         methods: {
@@ -143,6 +142,10 @@
         watch:{
             identity(){
                 if(this.identity) setTimeout(() => {
+                    if(!this.selectedNetworkString){
+                        this.logout();
+                        return false;
+                    }
                     this.identified = true;
                     this.getBalance();
                 }, 200);
@@ -155,14 +158,17 @@
                 if(this.selectedNetwork.host.length) {
                     const httpEndpoint = `http://${this.selectedNetwork.host}:${this.selectedNetwork.port}`;
                     this.selectedNetworkString = httpEndpoint;
-                    this.eos = Eos.Localnet({httpEndpoint});
+                    this.eos = Eos({httpEndpoint});
                 }
             },
             selectedNetworkString(){
                 clearTimeout(networkTimeout);
-                networkTimeout = setTimeout(() => {
-                    this[Actions.SET_NETWORK](this.selectedNetworkString)
-                }, 800);
+                networkTimeout = setTimeout(async () => {
+                    this[Actions.SET_NETWORK](this.selectedNetworkString);
+                    const chainId = await Eos({httpEndpoint:this.selectedNetworkString}).getInfo({}).then(x => x.chain_id).catch(() => null);
+                    if(!chainId) return;
+                    this[Actions.SET_SCATEOS](this.scatter.eos(this.network, Eos, {chainId}));
+                }, 2000);
             }
         }
 

@@ -8,8 +8,8 @@ export const actions = {
         const network = {
             host:splits[0],
             port:parseInt(splits[1] || 80)
-        }
-        console.log('network', network);
+        };
+
         commit(Actions.SET_NETWORK, network)
     },
 };
