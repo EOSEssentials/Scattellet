@@ -16,8 +16,8 @@
             <figure class="logo" :class="{'gone':identified}">Scattellet</figure>
             <section class="network" :class="{'hidden':identified}">
                 <section class="input-container">
-                    <label>Chain</label>
-                    <input placeholder="Domain or IP" v-model="selectedNetworkString" />
+                    <!--<label>Chain</label>-->
+                    <!--<input placeholder="Domain or IP" v-model="selectedNetworkString" />-->
                 </section>
             </section>
             <section>
@@ -46,6 +46,14 @@
     import Eos from 'eosjs';
 
     let networkTimeout = null;
+
+    const network = {
+        blockchain:'eos',
+        host:'nodes.get-scatter.com',
+        port:80,
+        chainId:'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906'
+    };
+
     export default {
         data(){ return {
             identified:false,
@@ -70,8 +78,7 @@
             ]),
             ...mapGetters([
                 'identity',
-                'account',
-                'network'
+                'account'
             ])
         },
         mounted(){
@@ -80,7 +87,7 @@
         methods: {
             async identifyOrSend(){
                 if(!this.identity) {
-                    const requiredFields = {accounts: [this.network]};
+                    const requiredFields = {accounts: [network]};
                     await this.scatter.getIdentity(requiredFields);
                 } else this.transfer();
             },
@@ -97,7 +104,8 @@
                 if(!this.amount.length || parseFloat(this.amount) <= 0) return this.error = 'Amount must be greater than 0';
                 this.transferring = true;
                 this.transferred = false;
-                const contract = await this.scateos.contract('eosio.token');
+                const scateos = this.scatter.eos(network, Eos, {chainId:network.chainId});
+                const contract = await scateos.contract('eosio.token');
                 const transferred = await contract.transfer(this.account.name, this.recipient, `${this.amount} ${this.symbol}`, '').catch(error => {
                     if(typeof error === 'object') this.error = error.message;
                     else this.error = JSON.parse(error).error.details[0].message.replace('condition: assertion failed: ', '');
@@ -120,17 +128,18 @@
                 this.identified = !this.identified;
             },
             async getBalance(){
-                if(!this.account || !this.symbol.length || !this.eos) {
+                if(!this.account || !this.symbol.length) {
                     this.balance = '0';
                     return false;
                 }
-                const balances = await this.eos.getTableRows({
+                const balances = await Eos({httpEndpoint:`http://${network.host}`, chainId:network.chainId}).getTableRows({
                     json:true,
                     code:'eosio.token',
                     scope:this.account.name,
                     table:'accounts',
                     limit:500
                 });
+
                 const row = balances.rows.find(row => row.balance.split(" ")[1].toLowerCase() === this.symbol.toLowerCase());
                 this.balance = row ? row.balance.split(" ")[0] : 0;
             },
@@ -142,10 +151,6 @@
         watch:{
             identity(){
                 if(this.identity) setTimeout(() => {
-                    if(!this.selectedNetworkString){
-                        this.logout();
-                        return false;
-                    }
                     this.identified = true;
                     this.getBalance();
                 }, 200);
@@ -154,22 +159,6 @@
             symbol(){
                 this.getBalance();
             },
-            network(){
-                if(this.selectedNetwork.host.length) {
-                    const httpEndpoint = `http://${this.selectedNetwork.host}:${this.selectedNetwork.port}`;
-                    this.selectedNetworkString = httpEndpoint;
-                    this.eos = Eos({httpEndpoint});
-                }
-            },
-            selectedNetworkString(){
-                clearTimeout(networkTimeout);
-                networkTimeout = setTimeout(async () => {
-                    this[Actions.SET_NETWORK](this.selectedNetworkString);
-                    const chainId = await Eos({httpEndpoint:this.selectedNetworkString}).getInfo({}).then(x => x.chain_id).catch(() => null);
-                    if(!chainId) return;
-                    this[Actions.SET_SCATEOS](this.scatter.eos(this.network, Eos, {chainId}));
-                }, 2000);
-            }
         }
 
     }
