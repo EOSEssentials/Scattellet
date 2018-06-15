@@ -104,7 +104,7 @@
                 if(!this.amount.length || parseFloat(this.amount) <= 0) return this.error = 'Amount must be greater than 0';
                 this.transferring = true;
                 this.transferred = false;
-                const scateos = this.scatter.eos(network, Eos, {chainId:network.chainId});
+                const scateos = this.scatter.eos(network, Eos, {chainId:network.chainId}, location.protocol.replace(':', ''));
                 const contract = await scateos.contract('eosio.token');
                 const transferred = await contract.transfer(this.account.name, this.recipient, `${this.amount} ${this.symbol}`, '').catch(error => {
                     if(typeof error === 'object') this.error = error.message;
