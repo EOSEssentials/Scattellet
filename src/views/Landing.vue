@@ -132,7 +132,7 @@
                     this.balance = '0';
                     return false;
                 }
-                const balances = await Eos({httpEndpoint:`http://${network.host}`, chainId:network.chainId}).getTableRows({
+                const balances = await Eos({httpEndpoint:`${location.protocol}//${network.host}`, chainId:network.chainId}).getTableRows({
                     json:true,
                     code:'eosio.token',
                     scope:this.account.name,
