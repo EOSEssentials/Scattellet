@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "set SCATTELLET=development&& webpack --watch",
-    "build": "set SCATTELLET=production&& set NODE_ENV=production&& webpack"
+    "build": "set SCATTELLET=production&& set NODE_ENV=production&& webpack",
+    "serve": "http-server ./build"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +28,7 @@
     "css-loader": "^0.28.10",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.11",
+    "http-server": "^0.11.1",
     "ignore-emit-webpack-plugin": "^0.2.1",
     "mocha": "^4.1.0",
     "node-sass": "^4.9.0",
