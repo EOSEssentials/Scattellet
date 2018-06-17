@@ -28,6 +28,7 @@
                     <section class="input-container">
                         <input placeholder="SYM" v-model="symbol" class="symbol" />
                         <input placeholder="Amount" class="amount" v-model="amount" />
+                        <input placeholder="Memo" class="memo" v-model="memo" />
                     </section>
                 </section>
                 <button class="animated" :disabled="transferring" @click="identifyOrSend" :class="{'send':identified, 'tada':transferred}">{{identified ? 'SEND' : 'ID'}}</button>
@@ -60,6 +61,7 @@
             recipient:'',
             symbol:'EOS',
             amount:'',
+            memo:'',
             balance:'0',
             eos:null,
             transferring:false,
@@ -106,7 +108,7 @@
                 this.transferred = false;
                 const scateos = this.scatter.eos(network, Eos, {chainId:network.chainId}, location.protocol.replace(':', ''));
                 const contract = await scateos.contract('eosio.token');
-                const transferred = await contract.transfer(this.account.name, this.recipient, `${this.amount} ${this.symbol}`, '').catch(error => {
+                const transferred = await contract.transfer(this.account.name, this.recipient, `${this.amount} ${this.symbol}`, this.memo).catch(error => {
                     if(typeof error === 'object') this.error = error.message;
                     else this.error = JSON.parse(error).error.details[0].message.replace('condition: assertion failed: ', '');
                     if(this.error.trim() === 'unknown key:') this.error = 'No such account';
