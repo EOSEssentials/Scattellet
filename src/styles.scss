@@ -246,6 +246,33 @@ button {
   }
 }
 
+.token-account {
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #589ea3;
+  position: absolute;
+  left: -23px;
+  bottom: 24px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 20px;
+  color: #fff;
+  z-index:3;
+
+  transition:background 0.2s ease, visibility 0.6s ease, opacity 0.6s ease;
+
+  &.gone {
+    opacity:0;
+    visibility: hidden;
+  }
+
+  &:hover {
+    background: #69b5ba;
+  }
+}
+
 .power-out {
   cursor: pointer;
   font-size:60px;
@@ -309,6 +336,12 @@ input {
     border-top-left-radius:0;
     border-bottom-left-radius:0;
     padding:0 20px;
+    padding-right:160px;
+  }
+
+  &.token-address {
+    width:100%;
+    float:left;
     padding-right:160px;
   }
 }

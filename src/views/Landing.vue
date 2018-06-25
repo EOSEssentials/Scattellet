@@ -20,15 +20,22 @@
                     <!--<input placeholder="Domain or IP" v-model="selectedNetworkString" />-->
                 </section>
             </section>
-            <section>
+            <section style="position:relative;">
+                <figure class="token-account" :class="{'gone':!identified}" @click="changingTokenAddress = !changingTokenAddress">
+                    <i class="fa fa-at" v-if="!changingTokenAddress"></i>
+                    <i class="fa fa-check" v-else></i>
+                </figure>
                 <section class="input-containers" :class="{'open':identified}">
                     <section class="input-container">
                         <input placeholder="Recipient" v-model="recipient" />
                     </section>
-                    <section class="input-container">
+                    <section class="input-container" v-if="!changingTokenAddress">
                         <input placeholder="SYM" v-model="symbol" class="symbol" />
                         <input placeholder="Amount" class="amount" v-model="amount" />
                         <input placeholder="Memo" class="memo" v-model="memo" />
+                    </section>
+                    <section class="input-container" v-else>
+                        <input placeholder="Token Address" class="token-address" v-model="tokenAddress" />
                     </section>
                 </section>
                 <button class="animated" :disabled="transferring" @click="identifyOrSend" :class="{'send':identified, 'tada':transferred}">{{identified ? 'SEND' : 'ID'}}</button>
@@ -69,7 +76,9 @@
             trx:'',
             error:null,
             selectingNetwork:false,
-            selectedNetworkString:''
+            selectedNetworkString:'',
+            changingTokenAddress:false,
+            tokenAddress:'eosio.token'
         }},
 
         computed: {
@@ -107,7 +116,7 @@
                 this.transferring = true;
                 this.transferred = false;
                 const scateos = this.scatter.eos(network, Eos, {chainId:network.chainId}, location.protocol.replace(':', ''));
-                const contract = await scateos.contract('eosio.token');
+                const contract = await scateos.contract(this.tokenAddress);
                 const transferred = await contract.transfer(this.account.name, this.recipient, `${this.amount} ${this.symbol}`, this.memo).catch(error => {
                     if(typeof error === 'object') this.error = error.message;
                     else this.error = JSON.parse(error).error.details[0].message.replace('condition: assertion failed: ', '');
@@ -136,13 +145,13 @@
                 }
                 const balances = await Eos({httpEndpoint:`${location.protocol}//${network.host}`, chainId:network.chainId}).getTableRows({
                     json:true,
-                    code:'eosio.token',
+                    code:this.tokenAddress,
                     scope:this.account.name,
                     table:'accounts',
                     limit:500
-                });
+                }).then(res => res.rows).catch(() => []);
 
-                const row = balances.rows.find(row => row.balance.split(" ")[1].toLowerCase() === this.symbol.toLowerCase());
+                const row = balances.find(row => row.balance.split(" ")[1].toLowerCase() === this.symbol.toLowerCase());
                 this.balance = row ? row.balance.split(" ")[0] : 0;
             },
             ...mapActions([
@@ -159,6 +168,9 @@
                 else this.identified = false;
             },
             symbol(){
+                this.getBalance();
+            },
+            tokenAddress(){
                 this.getBalance();
             },
         }
