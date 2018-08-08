@@ -1,11 +1,8 @@
 import VueInitializer from './vue/VueInitializer';
 import {Routing} from './vue/Routing';
 import * as Actions from './store/constants'
-import {RouteNames} from './vue/Routing'
-
+import ScatterJS from 'scatter-js/dist/scatter.esm';
 import ViewBase from './views/Base.vue'
-
-import Eos from 'eosjs'
 
 class App {
 
@@ -20,13 +17,12 @@ class App {
         };
 
         new VueInitializer(routes, components, middleware, (router, store) => {
-            // store.dispatch(Actions.SET_NETWORK, `http://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`);
-
-            document.addEventListener('scatterLoaded', () => {
-
-                window.scatter.requireVersion(4.0);
-                store.dispatch(Actions.SET_SCATTER, window.scatter);
+            ScatterJS.scatter.connect('Scattellet').then(connected => {
+                if(!connected) return;
+                store.dispatch(Actions.SET_SCATTER, ScatterJS.scatter);
                 window.scatter = null;
+            }).catch(err => {
+                console.log('error', err);
             })
         });
     }

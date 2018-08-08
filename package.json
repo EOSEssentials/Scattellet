@@ -14,6 +14,7 @@
     "dotenv-webpack": "^1.5.5",
     "eosjs": "14.0.0",
     "eosjs-ecc": "^4.0.1",
+    "scatter-js": "^2.0.4",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
